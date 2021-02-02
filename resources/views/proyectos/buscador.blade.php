@@ -92,22 +92,33 @@
      <br>    --}}
 
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
-    <div class="row justify-content-center align-items-center">
-        <fieldset class="border p-1 col-md-12">
-             <legend class="w-auto">Listado de proyectos</legend>   
+
+      
+        <div class="w-auto row justify-content-center align-items-center bg-light mb-2 p-2">
             
-             
-               <div class="col-md-12">
-             
-                <div class="table-responsive">
-          
+                <h4 class="col-9 text-center"><i class="fas fa-solar-panel"></i> Gestión de proyectos</h4>   
+                <div class="col-3 justify-content-center align-items-center float-right">
+               
+                <a href="/proyectos" 
+                    class="btn btn-primary btn-sm"
+                    title="Añadir nuevo proyecto">
+                    <i class="fas fa-plus"></i></a>
+{{--                 
+                <a href="/buscador" class="btn btn-sm btn-primary"
+                 title="Volver al buscador de proyectos">
+                  <i class="fas fa-search"></i>
+                </a> --}}
+              </div>
+            </div>
+
+            <div class="table-responsive">
                 {{-- <table class="table table-hover table-bordered yajra-datatable" style="text-align:center;"> --}}
-                    <table class="table table-striped yajra-datatable">
+            <table class="table table-striped yajra-datatable" style="width: 100%">
                 <thead>
                     <tr>
-                        <div><th width="20%" scope="col">Nombre</th></div>
+                        <div><th width="19%" scope="col">Nombre</th></div>
                         <div><th width="12%" scope="col">Provincia</th></div>
-                        <div><th width="16%"scope="col">Término municipal</th></div>
+                        <div><th width="15%"scope="col">Término municipal</th></div>
                         <div><th width="14%" scope="col">Sociedad</th></div>
                         <div><th width="9%" scope="col">Técnico</th></div>
                         <div><th width="9%" scope="col">Alta</th></div>
@@ -116,11 +127,10 @@
                         <div><th width="4%" scope="col"><a class="btn btn-primary btn-sm" title="Fincas">
                             <i class="fas fa-map-marked-alt"></i>
                             </a></th></div>
-                        <div><th width="12%" scope="col">Opciones</th></div>
+                        <div><th width="14%" scope="col">Opciones</th></div>
                     </tr>
                 </thead>
-                
-                
+                                
                 <tbody>
                     {{-- @foreach($proyectos as $proyecto)
                     <tr>
@@ -191,13 +201,13 @@
                  
             </table>
             </div>
-            </div>
+          
                   
-        </fieldset>    
-        
+      
+     
     {{-- {!! $proyectos->appends(Request::except('page'))->render() !!}  
          <h6>Total {{ $proyectos->total() }} proyecto(s).</h6> --}}
-</div>
+
 
             
    
@@ -209,6 +219,7 @@
 
 
 <script type="text/javascript">
+
     $(function () {
         var table = $('.yajra-datatable').DataTable({
           "language":  {"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"},
@@ -222,7 +233,7 @@
               {data: 'sociedad', name: 'sociedad'},
               {data: 'usu', name: 'usu'},
               {data: 'created_at', name: 'created_at'},
-              {data: 'tot', name: 'tot'},
+              {data: 'link', name: 'link'},
               {data: 'fin', name: 'fin'},
               {
                   data: 'action', 
@@ -232,7 +243,7 @@
               },
           ],
           columnDefs: [ 
-              {'targets': [5,6,7,8], // column index (start from 0)
+              {'targets': [5,6,7], // column index (start from 0)
                'orderable': false, // set orderable false for selected columns
                'searchable': false,
                //'className': 'text-center',

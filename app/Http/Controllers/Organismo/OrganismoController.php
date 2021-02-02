@@ -16,6 +16,17 @@ use App\Exports\OrganismosExport;
 class OrganismoController extends Controller
 {
     //
+
+    public function listadoOrganismos($id)
+    {
+        $organismos =  Organismo::where('proyecto_id', '=',  $id)->get();
+        $nom_proyecto = Proyecto::where('id','=',$id)->value('nom_proyecto');
+      
+    
+        return view ('organismos.lista')->with(compact('organismos','nom_proyecto','id')); 
+        
+    }
+
     
     public function getOrganismo($id)
     {

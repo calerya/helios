@@ -15,12 +15,15 @@ class FincaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Proyecto $proyecto)
+    public function index($id)
     {
-        $fincas=Finca::where('proyecto_id','=', $proyecto->id)->paginate(6);
-               
+        $fincas=Finca::where('proyecto_id','=', $id)->paginate(6);
+        $proyecto=Proyecto::findOrFail($id);
+        
+        // dd($id, $fincas, $proyecto);
         return view ('fincas.index')
         ->with(compact('fincas',$fincas))
+        ->with(compact('id'))
         ->with(compact('proyecto',$proyecto));
     }
 

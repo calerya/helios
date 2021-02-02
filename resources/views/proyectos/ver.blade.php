@@ -56,7 +56,7 @@
                     <i class="fas fa-university"></i>
               </div>
               
-              <a href="{{route('fincas.index', ['proyecto' => $proyecto->id] )}}" 
+              <a href="{{route('fincas.create',['id' => $proyecto->id])}}" 
                 class="btn btn btn-primary" 
                 title="Añadir finca">
                 <i class="fas fa-map-marked-alt"></i>
@@ -204,7 +204,7 @@
         </div>
       </div>
   </fieldset>    
-      
+  
   
 <br>
       

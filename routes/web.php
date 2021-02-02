@@ -89,6 +89,8 @@ Route::group(['middleware'=>'organismo', 'namespace'=>'Organismo'], function(){
     Route::get('/organismo/{id}/añadir', 'OrganismoController@añadir');
     
     Route::get('/listados', 'OrganismoController@listado');
+
+    Route::get('/organismo/lista/{id}', 'OrganismoController@listadoOrganismos');
     
     Route::get('/listados/excel/{id}','OrganismoController@createorganismoEXCEL');
     
@@ -121,7 +123,7 @@ Route::group(['middleware'=>'propietario', 'namespace'=>'Propietario'], function
 
 Route::group(['middleware'=>'finca', 'namespace'=>'Finca'], function(){
     
-    Route::get('/fincas/{proyecto}', 'FincaController@index')->name('fincas.index');
+    Route::get('/fincas/{id}', 'FincaController@index')->name('fincas.index');
 
     Route::get('/fincas/create/{id}', 'FincaController@create')->name('fincas.create');
     Route::post('/fincas', 'FincaController@store')->name('fincas.store');

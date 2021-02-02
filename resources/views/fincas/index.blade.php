@@ -38,18 +38,29 @@
         <div class="col-md-12">
             <div class="table-responsive">
 
-            <div class="justify-content-center align-items-center">
-                <fieldset class="border p-2">
-                    <legend class="w-auto">Fincas del proyecto {{$proyecto->nom_proyecto}}
-                        <a href="{{route('fincas.create',['id' => $proyecto->id])}}"
-                            class="btn btn-primary ml-3">
-                            Añadir finca
-                         </a>
-                    </legend>
-               
-                   
+            <div class="card col-md-12">
+                    <div class="card-header row justify-content-center">
+                        <h4 class="col-9 text-center"><i class="fas fa-map-marked-alt"></i> Fincas del proyecto {{$proyecto->nom_proyecto}} </h4>
+                            <div class="col-3 justify-content-center align-items-center float-right">
+                                <a href="{{route('fincas.create',['id' => $id])}}"
+                                    class="btn btn-primary ml-3"
+                                    title="Crear una nueva finca">
+                                    <i class="fas fa-plus"></i>          
+                                </a>
+                                <a href="/proyecto/{{$id}}/ver" 
+                                    class="btn btn-primary"
+                                    title="Volver al proyecto">
+                                    <i class="fas fa-solar-panel"></i>
+                                </a>
+                                <a href="/buscador" class="btn btn btn-primary"
+                                    title="Volver al buscador de proyectos">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </div>
+                    </div>
+                  
           
-                 <table class="table table-hover table-bordered" style="text-align:center;">
+                <table class="table table-hover table-bordered" style="text-align:center;">
                
                 <thead>
                     <tr class="table-active">
@@ -126,7 +137,7 @@
                  
                  
                 </table>
-            </fieldset>    
+            </div>    
             </div>
         </div>
            
@@ -136,7 +147,7 @@
                 <h6>Total {{ $fincas->total() }} finca(s).</h6>
             </div>
           
-</div>
+
 
                   
    

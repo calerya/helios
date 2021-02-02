@@ -337,8 +337,24 @@ class ProyectoController extends Controller
                 ->addIndexColumn()
                 ->editColumn('created_at', function ($proyecto) 
                     {       
-                    return date('d-m-Y', strtotime($proyecto->created_at));
+                    return date('d/m/y', strtotime($proyecto->created_at));
                     })
+                ->addColumn('link', function($proyecto){
+                    $actionBtn = 
+                    '<a href="/organismo/lista/'.$proyecto->id.'" 
+                    class="btn btn-info btn-sm rounded-circle"
+                    title="Ver organismos del proyecto">'.$proyecto->tot.'
+                   </a>';
+                   return $actionBtn;
+                })
+                ->addColumn('fin', function($proyecto){
+                    $actionBtn = 
+                    '<a href="/fincas/'.$proyecto->id.'" 
+                    class="btn btn-info btn-sm rounded-circle"
+                    title="Ver fincas del proyecto">'.$proyecto->fin.'
+                   </a>';
+                   return $actionBtn;
+                })
                 ->addColumn('action', function($proyecto){
                     $actionBtn = 
                     '<a href="/proyecto/'.$proyecto->id.'/ver" 
@@ -371,7 +387,7 @@ class ProyectoController extends Controller
                     </div>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['link','fin','action'])
                 ->make(true);
         }
 
