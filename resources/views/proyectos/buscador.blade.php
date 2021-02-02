@@ -93,16 +93,16 @@
 
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <div class="row justify-content-center align-items-center">
-        <fieldset class="border p-2  col-md-12">
+        <fieldset class="border p-1 col-md-12">
              <legend class="w-auto">Listado de proyectos</legend>   
             
              
-               
-             <div class="col-md-12">
+               <div class="col-md-12">
+             
                 <div class="table-responsive">
           
                 {{-- <table class="table table-hover table-bordered yajra-datatable" style="text-align:center;"> --}}
-                    <table class="table table-bordered yajra-datatable">
+                    <table class="table table-striped yajra-datatable">
                 <thead>
                     <tr>
                         <div><th width="20%" scope="col">Nombre</th></div>
@@ -209,9 +209,9 @@
 
 
 <script type="text/javascript">
-
     $(function () {
         var table = $('.yajra-datatable').DataTable({
+          "language":  {"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"},
           processing: true,
           serverSide: true,
           ajax: "{{ route('buscar.proyectos') }}",
@@ -232,7 +232,7 @@
               },
           ],
           columnDefs: [ 
-              {'targets': [5,6,7], // column index (start from 0)
+              {'targets': [5,6,7,8], // column index (start from 0)
                'orderable': false, // set orderable false for selected columns
                'searchable': false,
                //'className': 'text-center',
