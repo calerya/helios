@@ -11,14 +11,11 @@ const mix = require('laravel-mix');
  |
  */
 
-// mix.js('resources/js/app.js', 'public/js')
-    
-//     .sass('resources/sass/app.scss', 'public/css');
-
 mix.js('resources/js/app.js', 'public/js')
-    .autoload({
-        jquery: ['$','window.jQuery','jQuery']
-    })
-    .sass('resources/sass/app.scss', 'public/css')
-    .sourceMaps();
+    
+    .sass('resources/sass/app.scss', 'public/css');
+
+    mix.autoload({
+        jquery: ['$', 'window.jQuery']
+    });
 
