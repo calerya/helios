@@ -319,13 +319,90 @@ class ProyectoController extends Controller
               
         foreach($proyectos as $proyecto) {
         
+            $proyecto->classbot="";
+            $proyecto->organismocaducado=0;
+            $proyecto->organismocaducapronto=0;
+            $proyecto->organismopdterespuesta=0;
+
             $proyecto->tot = Organismo::join('proyectos', 'proyectos.id','=', 'organismos.proyecto_id')
             ->where('proyectos.id','=',$proyecto->id)
             ->count();
+
+            $proyecto->organismocaducado = Organismo::join('proyectos', 'proyectos.id','=', 'organismos.proyecto_id')
+            ->where('proyectos.id','=',$proyecto->id)
+            ->where('organismos.finalizado','=', '0')
+            ->where('organismos.fec_caducidad','<',today())
+            ->count();
+
+            if($proyecto->organismocaducado > 0)
+           {
+                $proyecto->classbot='btn-danger';
+           }
+           else
+           {
+                $proyecto->organismocaducapronto = Organismo::join('proyectos', 'proyectos.id','=', 'organismos.proyecto_id')
+                ->where('proyectos.id','=',$proyecto->id)
+                ->where('organismos.finalizado','=', '0')
+                ->where('organismos.fec_caducidad','<',today()->addDays(30))
+                ->count();
+
+                if($proyecto->organismocaducapronto > 0)
+                {
+                     $proyecto->classbot="btn-warning";
+                     
+                }
+                else
+                {
+                    $proyecto->organismopdterespuesta = Organismo::join('proyectos', 'proyectos.id','=', 'organismos.proyecto_id')
+                    ->where('proyectos.id','=',$proyecto->id)
+                    ->where('organismos.finalizado','=', '0')
+                    ->where(function($query){
+                        $query->orWhere(function($query){
+                            $query->whereNotNull('organismos.fec_requerimiento')
+                                ->whereNull('organismos.fec_cont_requerimiento');
+                        });
+                        $query->orWhere(function($query){
+                            $query->whereNotNull('organismos.fec_solic_prorroga')
+                                  ->whereNull('organismos.fec_concesion_pror');
+                        });
+                        $query->orWhere(function($query){
+                            $query->whereNotNull('organismos.fec_solic_apm')
+                                  ->whereNull('organismos.fec_conc_apm');
+                        });
+                        $query->orWhere(function($query){
+                            $query->whereNotNull('organismos.fec_solic_apm')
+                                  ->whereNull('organismos.fec_conc_apm');
+                        });
+                                               
+                        
+                        })->count();
+
+                        if($proyecto->organismopdterespuesta > 0)
+                        {
+                            $proyecto->classbot="btn-secondary";
+                        }
+                        else if($proyecto->organismopdterespuesta == 0)
+                            {
+                                $proyecto->classbot="btn-success";
+                            }
+                            else
+                            {
+                                $proyecto->classbot="";
+                            }
+
+                }
+                        
+
+                        
+            }
+            
+           
+
             
             $proyecto->fin = Finca::join('proyectos', 'proyectos.id','=', 'fincas.proyecto_id')
             ->where('proyectos.id','=',$proyecto->id)
             ->count();
+
 
             $proyecto->usu = User::where('id','=',$proyecto->users_id)->value('name');
             
@@ -342,7 +419,8 @@ class ProyectoController extends Controller
                 ->addColumn('link', function($proyecto){
                     $actionBtn = 
                     '<a href="/organismo/lista/'.$proyecto->id.'" 
-                    class="btn btn-info btn-sm rounded-circle"
+                
+                    class="btn '.$proyecto->classbot.' btn-sm rounded-circle"
                     title="Ver organismos del proyecto">'.$proyecto->tot.'
                    </a>';
                    return $actionBtn;
@@ -365,11 +443,33 @@ class ProyectoController extends Controller
                     class="btn btn-primary btn-sm"
                     title="Editar el proyecto">
                     <i class="far fa-edit"></i></a>
-                    <button type="button" 
-                    class="btn btn btn-danger btn-sm" 
-                    data-toggle="modal" data-target="#exampleModal" 
-                    title="Eliminar el proyecto, sus organismos y sus hitos">
-                    <i class="fas fa-trash-alt"></i></button>
+
+                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" title="Eliminar el proyecto, sus organismos y sus hitos"><i class="fas fa-trash-alt"></i></button>
+                            
+                            <div class="modal" id="exampleModal">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title">Eliminar proyecto</h5>
+                                      
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="text-center">
+                                        <span class="text-warning"><i style="font-size:70px" class="fas fa-exclamation-circle"></i></span>  
+                                    </div>
+                                    <p>Quiere eliminar el proyecto '.$proyecto->nom_proyecto.' sus hitos y sus organismos?</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                      <a href="/proyecto/'.$proyecto->id.'/eliminar"><button class="btn btn-danger">Eliminar</button></a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> 
+                    
                     <a class="btn btn-info btn-sm"
                     title="Más opciones"
                     href="#" role="button" 
@@ -390,6 +490,8 @@ class ProyectoController extends Controller
                 ->rawColumns(['link','fin','action'])
                 ->make(true);
         }
+        
+    
 
     }
 
@@ -398,8 +500,7 @@ class ProyectoController extends Controller
                     // title="Editar el proyecto">
                     // <i class="far fa-edit"></i>
                     // </a>
-
-    
+                    
     public function hitos(Request $request)
     {
         $hito_seleccionado=$request->input('selecciona_hito');
